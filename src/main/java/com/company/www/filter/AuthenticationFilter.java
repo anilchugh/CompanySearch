@@ -17,11 +17,18 @@ import java.io.PrintWriter;
 
 public class AuthenticationFilter extends GenericFilterBean {
 
+    private final String apiKey;
+
+    public AuthenticationFilter(String apiKey) {
+        super();
+        this.apiKey = apiKey;
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         try {
-            Authentication authentication = AuthenticationService.getAuthentication((HttpServletRequest) request);
+            Authentication authentication = AuthenticationService.getAuthentication((HttpServletRequest) request, apiKey);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception exp) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;

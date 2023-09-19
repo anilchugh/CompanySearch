@@ -6,8 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class CompanySearchApplicationTests {
 
-	@Test
-	void addTestHere() {
-	}
+    @Test
+    void addTestHere() {
+    }
 
 }
