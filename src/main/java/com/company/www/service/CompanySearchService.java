@@ -32,7 +32,7 @@ public class CompanySearchService {
             //filter companies based on companyId or companyName match and also active status
             List<Company> filteredCompanies = response.getBody().getCompanies().stream().
                     filter(c -> StringUtils.hasText(companySearch.getCompanyNumber()) ? companySearch.getCompanyNumber().equals(c.getCompanyNumber()) : c.getTitle().equals(companySearch.getCompanyName()))
-                    .filter(c -> companySearch.isActive() ? "active".equals(c.getCompanyStatus()) : true)
+                    .filter(c -> companySearch.isActive() ? CompanyStatus.ACTIVE.status.equals(c.getCompanyStatus()) : true)
                     .collect(Collectors.toUnmodifiableList());
             response.getBody().setCompanies(filteredCompanies);
             response.getBody().setTotalResults(filteredCompanies.size());

@@ -74,7 +74,7 @@ class CompanySearchServiceTest {
         Assertions.assertEquals("COMPANY_ID_2", companySearchResult.getCompanies().get(0).getCompanyNumber());
         Assertions.assertEquals("COMPANY_NAME_2", companySearchResult.getCompanies().get(0).getTitle());
         Assertions.assertEquals("2010-10-10", companySearchResult.getCompanies().get(0).getDateOfCreation());
-        Assertions.assertEquals("active", companySearchResult.getCompanies().get(0).getCompanyStatus());
+        Assertions.assertEquals(CompanyStatus.ACTIVE.status, companySearchResult.getCompanies().get(0).getCompanyStatus());
     }
 
     @Test
@@ -101,7 +101,7 @@ class CompanySearchServiceTest {
         Assertions.assertEquals("COMPANY_ID_1", companySearchResult.getCompanies().get(0).getCompanyNumber());
         Assertions.assertEquals("COMPANY_NAME_1", companySearchResult.getCompanies().get(0).getTitle());
         Assertions.assertEquals("2020-20-20", companySearchResult.getCompanies().get(0).getDateOfCreation());
-        Assertions.assertEquals("active", companySearchResult.getCompanies().get(0).getCompanyStatus());
+        Assertions.assertEquals(CompanyStatus.ACTIVE.status, companySearchResult.getCompanies().get(0).getCompanyStatus());
     }
 
     @Test
@@ -121,7 +121,7 @@ class CompanySearchServiceTest {
         Assertions.assertEquals("COMPANY_ID_3", companySearchResult.getCompanies().get(0).getCompanyNumber());
         Assertions.assertEquals("COMPANY_NAME_3", companySearchResult.getCompanies().get(0).getTitle());
         Assertions.assertEquals("2011-11-11", companySearchResult.getCompanies().get(0).getDateOfCreation());
-        Assertions.assertEquals("dissolved", companySearchResult.getCompanies().get(0).getCompanyStatus());
+        Assertions.assertEquals(CompanyStatus.DISSOLVED.status, companySearchResult.getCompanies().get(0).getCompanyStatus());
     }
 
     @Test
@@ -168,21 +168,21 @@ class CompanySearchServiceTest {
     private List<Company> getCompanies() {
         Company company1 = new Company();
         company1.setAddress(getAddress());
-        company1.setCompanyStatus("active");
+        company1.setCompanyStatus(CompanyStatus.ACTIVE.status);
         company1.setCompanyNumber("COMPANY_ID_1");
         company1.setTitle("COMPANY_NAME_1");
         company1.setDateOfCreation("2020-20-20");
 
         Company company2 = new Company();
         company2.setAddress(getAddress());
-        company2.setCompanyStatus("active");
+        company2.setCompanyStatus(CompanyStatus.ACTIVE.status);
         company2.setCompanyNumber("COMPANY_ID_2");
         company2.setTitle("COMPANY_NAME_2");
         company2.setDateOfCreation("2010-10-10");
 
         Company company3 = new Company();
         company3.setAddress(getAddress());
-        company3.setCompanyStatus("dissolved");
+        company3.setCompanyStatus(CompanyStatus.DISSOLVED.status);
         company3.setCompanyNumber("COMPANY_ID_3");
         company3.setTitle("COMPANY_NAME_3");
         company3.setDateOfCreation("2011-11-11");
