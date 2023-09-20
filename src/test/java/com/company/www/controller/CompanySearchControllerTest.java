@@ -64,6 +64,19 @@ class CompanySearchControllerTest {
     }
 
     @Test
+    void searchActiveCompaniesSucceedsWithApiToken() throws Exception {
+        CompanySearch companySearch = new CompanySearch("COMPANY_NAME", "COMPANY_ID");
+        mockMvc.perform(
+                post("/www.company.com/search")
+                        .header("x-api-key", "API_KEY")
+                        .param("isActive", "true")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(companySearch)))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
     void searchCompaniesSucceedsWithMissingCompanyName() throws Exception {
         CompanySearch companySearch = new CompanySearch(null, "COMPANY_ID");
         String error = mockMvc.perform(

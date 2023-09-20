@@ -30,7 +30,9 @@ public class CompanySearchService {
         ResponseEntity<CompanySearchResult> response = restTemplateBuilder.build().exchange("https://exercise.trunarrative.cloud/TruProxyAPI/rest/Companies/v1/Search?Query=companies", HttpMethod.GET, request, CompanySearchResult.class);
         if (response.hasBody() && response.getBody().getTotalResults() > 0) {
             List<Company> filteredCompanies = response.getBody().getCompanies().stream().
-                    filter(c -> StringUtils.hasText(companySearch.getCompanyNumber()) ? companySearch.getCompanyNumber().equals(c.getCompanyNumber()) : c.getTitle().equals(companySearch.getCompanyName())).collect(Collectors.toUnmodifiableList());
+                    filter(c -> StringUtils.hasText(companySearch.getCompanyNumber()) ? companySearch.getCompanyNumber().equals(c.getCompanyNumber()) : c.getTitle().equals(companySearch.getCompanyName()))
+                    .filter(c -> companySearch.isActive() ? "active".equals(c.getCompanyStatus()) : true)
+                    .collect(Collectors.toUnmodifiableList());
             response.getBody().setCompanies(filteredCompanies);
             response.getBody().setTotalResults(filteredCompanies.size());
         }

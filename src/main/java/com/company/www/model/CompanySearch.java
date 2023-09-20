@@ -10,6 +10,8 @@ public class CompanySearch {
     @JsonProperty
     String companyNumber;
 
+    boolean isActive;
+
     public CompanySearch(String companyName, String companyNumber) {
         this.companyName = companyName;
         this.companyNumber = companyNumber;
@@ -29,5 +31,13 @@ public class CompanySearch {
 
     public void setCompanyNumber(String companyNumber) {
         this.companyNumber = companyNumber;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

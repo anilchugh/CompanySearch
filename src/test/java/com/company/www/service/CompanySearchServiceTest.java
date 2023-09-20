@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -73,7 +74,7 @@ class CompanySearchServiceTest {
         Assertions.assertEquals("COMPANY_ID_2", companySearchResult.getCompanies().get(0).getCompanyNumber());
         Assertions.assertEquals("COMPANY_NAME_2", companySearchResult.getCompanies().get(0).getTitle());
         Assertions.assertEquals("2010-10-10", companySearchResult.getCompanies().get(0).getDateOfCreation());
-        Assertions.assertEquals("ACTIVE", companySearchResult.getCompanies().get(0).getCompanyStatus());
+        Assertions.assertEquals("active", companySearchResult.getCompanies().get(0).getCompanyStatus());
     }
 
     @Test
@@ -100,7 +101,7 @@ class CompanySearchServiceTest {
         Assertions.assertEquals("COMPANY_ID_1", companySearchResult.getCompanies().get(0).getCompanyNumber());
         Assertions.assertEquals("COMPANY_NAME_1", companySearchResult.getCompanies().get(0).getTitle());
         Assertions.assertEquals("2020-20-20", companySearchResult.getCompanies().get(0).getDateOfCreation());
-        Assertions.assertEquals("ACTIVE", companySearchResult.getCompanies().get(0).getCompanyStatus());
+        Assertions.assertEquals("active", companySearchResult.getCompanies().get(0).getCompanyStatus());
     }
 
     @Test
@@ -109,6 +110,28 @@ class CompanySearchServiceTest {
         Mockito.when(companySearchResponseEntity.getBody()).thenReturn(null);
         CompanySearch companySearch = new CompanySearch("COMPANY_NAME_0", null);
         Assertions.assertNull(companySearchService.searchCompanies(companySearch));
+    }
+
+    @Test
+    void searchForNonActiveCompanyWithMatchFound() throws Exception {
+        CompanySearch companySearch = new CompanySearch("COMPANY_NAME_3", "COMPANY_ID_3");
+        companySearch.setActive(false);
+        CompanySearchResult companySearchResult = companySearchService.searchCompanies(companySearch);
+        Assertions.assertEquals(1, companySearchResult.getTotalResults());
+        Assertions.assertEquals("COMPANY_ID_3", companySearchResult.getCompanies().get(0).getCompanyNumber());
+        Assertions.assertEquals("COMPANY_NAME_3", companySearchResult.getCompanies().get(0).getTitle());
+        Assertions.assertEquals("2011-11-11", companySearchResult.getCompanies().get(0).getDateOfCreation());
+        Assertions.assertEquals("dissolved", companySearchResult.getCompanies().get(0).getCompanyStatus());
+    }
+
+    @Test
+    void searchForActiveCompanyWithNoMatchFound() throws Exception {
+        CompanySearch companySearch = new CompanySearch("COMPANY_NAME_3", "COMPANY_ID_3");
+        companySearch.setActive(true);
+        CompanySearchResult companySearchResult = companySearchService.searchCompanies(companySearch);
+        Assertions.assertNotNull(companySearchResult);
+        Assertions.assertEquals(0, companySearchResult.getTotalResults());
+        Assertions.assertTrue(CollectionUtils.isEmpty(companySearchResult.getCompanies()));
     }
 
     private CompanySearchResult getCompanySearchResult() {
@@ -145,18 +168,25 @@ class CompanySearchServiceTest {
     private List<Company> getCompanies() {
         Company company1 = new Company();
         company1.setAddress(getAddress());
-        company1.setCompanyStatus("ACTIVE");
+        company1.setCompanyStatus("active");
         company1.setCompanyNumber("COMPANY_ID_1");
         company1.setTitle("COMPANY_NAME_1");
         company1.setDateOfCreation("2020-20-20");
 
         Company company2 = new Company();
         company2.setAddress(getAddress());
-        company2.setCompanyStatus("ACTIVE");
+        company2.setCompanyStatus("active");
         company2.setCompanyNumber("COMPANY_ID_2");
         company2.setTitle("COMPANY_NAME_2");
         company2.setDateOfCreation("2010-10-10");
-        return Arrays.asList(company1, company2);
+
+        Company company3 = new Company();
+        company3.setAddress(getAddress());
+        company3.setCompanyStatus("dissolved");
+        company3.setCompanyNumber("COMPANY_ID_3");
+        company3.setTitle("COMPANY_NAME_3");
+        company3.setDateOfCreation("2011-11-11");
+        return Arrays.asList(company1, company2, company3);
     }
 
     private Address getAddress() {

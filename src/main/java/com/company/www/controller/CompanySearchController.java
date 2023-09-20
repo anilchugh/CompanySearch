@@ -25,7 +25,8 @@ public class CompanySearchController {
     private CompanySearchService companySearchService;
 
     @PostMapping("/search")
-    public ResponseEntity<List<Company>> searchCompanies(@Valid @RequestBody CompanySearch companySearch) {
+    public ResponseEntity<List<Company>> searchCompanies(@Valid @RequestBody CompanySearch companySearch, @RequestParam(required = false) boolean isActive) {
+        companySearch.setActive(isActive);
         CompanySearchResult companySearchResult = companySearchService.searchCompanies(companySearch);
         if (companySearchResult != null && companySearchResult.getTotalResults() > 0) {
             for (Company company : companySearchResult.getCompanies()) {
