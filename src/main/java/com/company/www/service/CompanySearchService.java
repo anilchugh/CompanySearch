@@ -60,9 +60,4 @@ public class CompanySearchService {
         return headers;
     }
 
-    public static void main(String[] args) {
-        CompanySearch companySearch = new CompanySearch("COMPANIES LIMITED", null);
-        System.out.println(new CompanySearchService().searchCompanies(companySearch));
-    }
-
 }

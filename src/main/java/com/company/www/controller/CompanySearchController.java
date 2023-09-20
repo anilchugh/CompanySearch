@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("www.company.com")
+@RequestMapping("/www.company.com")
 public class CompanySearchController {
 
     @Autowired
