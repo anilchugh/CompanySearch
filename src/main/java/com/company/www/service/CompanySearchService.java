@@ -29,6 +29,7 @@ public class CompanySearchService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(getHttpHeaders());
         ResponseEntity<CompanySearchResult> response = restTemplateBuilder.build().exchange("https://exercise.trunarrative.cloud/TruProxyAPI/rest/Companies/v1/Search?Query=companies", HttpMethod.GET, request, CompanySearchResult.class);
         if (response.hasBody() && response.getBody().getTotalResults() > 0) {
+            //filter companies based on companyId or companyName match and also active status
             List<Company> filteredCompanies = response.getBody().getCompanies().stream().
                     filter(c -> StringUtils.hasText(companySearch.getCompanyNumber()) ? companySearch.getCompanyNumber().equals(c.getCompanyNumber()) : c.getTitle().equals(companySearch.getCompanyName()))
                     .filter(c -> companySearch.isActive() ? "active".equals(c.getCompanyStatus()) : true)
@@ -45,6 +46,7 @@ public class CompanySearchService {
         params.put("CompanyNumber", companyNumber);
         ResponseEntity<OfficerSearchResult> response = restTemplateBuilder.build().exchange("https://exercise.trunarrative.cloud/TruProxyAPI/rest/Companies/v1/Officers?CompanyNumber={CompanyNumber}", HttpMethod.GET, request, OfficerSearchResult.class, params);
         if (response.hasBody() && response.getBody().getTotalResults() > 0) {
+            //filter out officers that have resigned/not active
             List<Officer> filteredOfficers = response.getBody().getOfficers().stream().
                     filter(o -> !StringUtils.hasText(o.getResignedOn())).collect(Collectors.toUnmodifiableList());
             response.getBody().setOfficers(filteredOfficers);
